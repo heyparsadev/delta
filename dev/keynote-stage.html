@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" class="js kn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stage harness</title>
+<link rel="stylesheet" href="../css/fonts.css">
+<link rel="stylesheet" href="../css/keynote/tokens.css">
+<link rel="stylesheet" href="../css/keynote/base.css">
+<style>
+  .panel { position: fixed; right: 12px; top: 12px; bottom: 12px; overflow: auto; z-index: 10; width: 290px; padding: 12px; border-radius: 12px; background: rgba(18, 18, 20, 0.88); font: 11px/1.4 var(--mono); color: #ddd; }
+  .panel label { display: grid; grid-template-columns: 84px 1fr 40px; gap: 6px; align-items: center; margin: 3px 0; }
+  .panel output { text-align: right; }
+  .panel pre { margin: 10px 0 0; color: #9ff0d8; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div class="stage" aria-hidden="true"><canvas id="stage"></canvas></div>
+<div class="panel" id="panel"></div>
+<script type="module" src="keynote-stage.js"></script>
+</body>
+</html>

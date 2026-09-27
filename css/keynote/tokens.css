@@ -1,0 +1,45 @@
+/* Keynote design tokens. The fonts come from css/fonts.css. */
+:root {
+  color-scheme: dark;
+  --bg: #000;
+  --ink: #f5f5f7;
+  --ink-2: #a1a1a6;
+  --ink-3: #6e6e73;
+  --line: rgba(245, 245, 247, 0.16);
+  --focus: #9fc9ff;
+
+  --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --serif: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --mono: 'Martian Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --fs-name: clamp(64px, 11vw, 188px);
+  --fs-line: clamp(40px, 6.2vw, 104px);
+  --fs-long: clamp(32px, 4.3vw, 72px);
+  --fs-heading: clamp(34px, 4.4vw, 72px);
+  --fs-stat: clamp(96px, 16vw, 264px);
+  --fs-label: clamp(19px, 1.8vw, 28px);
+  --fs-tag: clamp(19px, 1.7vw, 27px);
+  --fs-stage: clamp(22px, 2.2vw, 34px);
+  --fs-caption: clamp(17px, 0.45vw + 14.6px, 21px);
+  --fs-body: clamp(16px, 0.3vw + 14.9px, 18px);
+  --fs-mono: 11px;
+
+  --track-tight: -0.035em;
+  --track-name: -0.045em;
+  --gutter: clamp(20px, 5vw, 80px);
+  --measure: 34em;
+  --bar-h: 48px;
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --slide-in: 0.7s;
+  --slide-out: 0.35s;
+
+  --z-stage: 0;
+  --z-frames: 2;
+  --z-bar: 10;
+  --z-skip: 100;
+}

@@ -1,0 +1,138 @@
+/* The keynote at work. Beats are tall empty blocks that give the scroll its length (the script sets
+   their heights); each beat's frame sits fixed over the stage and shows while its beat is on. */
+.kn main, .kn footer { position: relative; z-index: var(--z-frames); }
+.kn .beat { position: relative; height: 100vh; height: 100lvh; }
+.kn body::after { content: ''; display: block; height: 100vh; height: 100lvh; }
+.kn .frame { position: fixed; inset: 0; opacity: 0; pointer-events: none; transition: opacity var(--slide-out) var(--ease); }
+.kn .frame.is-active { opacity: 1; transition-duration: 0.45s; }
+.kn-boot .frame, .kn-boot .slide, .kn-boot .sheet, .kn-boot .caption .w { transition: none !important; }
+.kn .frame.is-active .is-on, .kn .frame.is-active .caption a { pointer-events: auto; }
+
+/* Slides: only the current one shows. It rises in and fades out. */
+.kn .slides { position: absolute; inset: 0; }
+.kn .slide {
+  position: absolute; left: calc(var(--gutter) + var(--safe-l)); right: calc(var(--gutter) + var(--safe-r));
+  top: 50%; opacity: 0; transform: translateY(calc(-50% + 20px)); text-align: center;
+  transition: opacity var(--slide-out) var(--ease), transform var(--slide-out) var(--ease);
+}
+.kn .slide.is-on { opacity: 1; transform: translateY(-50%); transition-duration: var(--slide-in); }
+.kn .slide[data-layout="left"] { right: 50%; text-align: left; }
+.kn .slide[data-layout="right"] { left: 50%; text-align: left; }
+@media (max-width: 899px) {
+  .kn .slide, .kn .slide[data-layout="left"], .kn .slide[data-layout="right"] {
+    left: calc(var(--gutter) + var(--safe-l)); right: calc(var(--gutter) + var(--safe-r));
+    top: calc(var(--bar-h) + var(--safe-t) + 5vh); transform: translateY(20px); text-align: left;
+  }
+  .kn .slide.is-on { transform: none; }
+}
+
+.kn .slide.line, .kn .slide .big, .kn .slide.qa .q, .kn .slide.answer .line, .kn .slide.stage.greeting {
+  font: 600 var(--fs-line)/1.02 var(--sans); letter-spacing: var(--track-tight); color: var(--ink); text-wrap: balance;
+}
+.kn .slide.long, .kn .slide .big.long { font-size: var(--fs-long); line-height: 1.06; }
+.kn .slide.heading, .kn .slide .heading { font: 600 var(--fs-heading)/1.05 var(--sans); letter-spacing: -0.03em; text-wrap: balance; }
+.kn .slide.stage { font: 500 var(--fs-stage)/1.2 var(--sans); color: var(--ink-2); letter-spacing: -0.01em; }
+.kn .slide.title .name { font: 650 var(--fs-name)/0.92 var(--sans); letter-spacing: var(--track-name); margin: 0.1em 0 0.16em; }
+.kn .slide.title.project .name, .kn .slide.title.small .name { font-size: var(--fs-heading); line-height: 1.02; letter-spacing: -0.035em; }
+.kn .slide.title .tagline { font: 450 var(--fs-tag)/1.35 var(--sans); color: var(--ink-2); max-width: 24em; text-wrap: balance; }
+.kn .slide .meta { display: block; margin-top: 0.8em; font: 500 var(--fs-mono)/1.5 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.kn .slide .link { margin-top: 1em; font: 500 var(--fs-tag)/1.3 var(--sans); color: var(--ink-2); }
+.kn .slide .kicker { display: block; margin-bottom: 1.1em; }
+.kn .slide.stat .num { font: 600 var(--fs-stat)/0.9 var(--sans); letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+.kn .slide.stat .label { font: 500 var(--fs-label)/1.3 var(--sans); color: var(--ink-2); margin-top: 0.25em; }
+/* Beside the object a stat has half the width, so its number steps down to fit "41,000". */
+.kn .slide.stat[data-layout="left"] .num, .kn .slide.stat[data-layout="right"] .num { font-size: clamp(80px, 10.5vw, 188px); }
+.kn .slide.qa .a { font: 500 var(--fs-tag)/1.35 var(--sans); color: var(--ink-2); margin-top: 0.7em; max-width: 24em; }
+.kn .slide.ask span {
+  display: inline-block; padding: 0.6em 1.2em; border-radius: 999px; border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.05); font: 500 var(--fs-tag)/1.2 var(--sans);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.kn .slide.answer .score { margin-top: 1.3em; font: 500 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); }
+.kn .slide.omt { font: italic 400 var(--fs-name)/1 var(--serif); letter-spacing: -0.015em; }
+.kn .slide.belief .links { display: flex; flex-wrap: wrap; gap: 0.4em 1.4em; justify-content: center; margin-top: 1.1em; font: 500 var(--fs-tag)/1.3 var(--sans); color: var(--ink-2); }
+
+/* Lit type: while its title holds, a highlight passes across the name and leaves it lit. */
+.kn .name.lit {
+  --s: calc(var(--sweep, 1) * 140% - 20%);
+  background: linear-gradient(100deg, var(--ink) 0%, var(--ink) calc(var(--s) - 14%), #fffaf0 calc(var(--s) - 4%), #56565b calc(var(--s) + 8%), #56565b 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* Captions: the current sentence at the bottom, its words lighting up in order. */
+.kn .caption {
+  position: absolute; left: 50%; bottom: calc(var(--safe-b) + 6vh); margin: 0;
+  width: min(var(--measure), calc(100vw - 2 * var(--gutter) - var(--safe-l) - var(--safe-r)));
+  transform: translateX(-50%);
+  font: 450 var(--fs-caption)/1.5 var(--sans); text-align: center; color: var(--ink);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.95), 0 0 3px rgba(0, 0, 0, 0.7);
+  text-wrap: pretty;
+}
+.kn .caption .s { display: none; }
+.kn .caption .s.is-on { display: inline; }
+.kn .caption .w { opacity: 0; transition: opacity 0.22s linear; }
+.kn .caption a { text-decoration-color: rgba(245, 245, 247, 0.4); }
+
+/* Demos: small pieces of UI pinned to the object by the director (plane pins map an element onto a
+   surface with matrix3d from its top-left corner; point pins centre it on a 3D point). They fade in
+   with their beat's cues and never take the pointer, except the Mars drag handle. */
+.kn .demo { position: fixed; left: 0; top: 0; opacity: 0; pointer-events: none; transition: opacity 0.45s var(--ease); }
+.kn .demo.is-on { opacity: 1; }
+.kn .demo [data-at] { opacity: 0; transition: opacity 0.5s var(--ease); }
+.kn .demo [data-at].is-on { opacity: 1; }
+.kn .demo .w { transition: opacity 0.18s linear; }
+
+/* The code on the card: it appears in a single frame, as the delivery does. */
+.kn .card-code {
+  width: 428px; height: 270px; transform-origin: 0 0; display: grid; place-items: end center; padding-bottom: 62px;
+  font: 500 23px/1 var(--mono); letter-spacing: 0.14em; color: rgba(255, 255, 255, 0.93);
+  text-shadow: 0 0 18px rgba(255, 240, 220, 0.35); transition: none;
+}
+
+/* Mind Mirror on the phone-sized mirror, a 300 × 620 screen. */
+.kn .mm {
+  width: 300px; height: 620px; transform-origin: 0 0; padding: 40px 26px 30px; border-radius: 46px;
+  background: linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.3)); color: var(--ink);
+  font: 450 13.5px/1.45 var(--sans); letter-spacing: -0.005em;
+}
+.mm-note, .mm-label { font: 500 8.5px/1.4 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.mm-thought { margin: 18px 0 20px; font-size: 16.5px; line-height: 1.42; font-weight: 500; letter-spacing: -0.01em; }
+.mm mark { background: none; color: inherit; border-radius: 3px; transition: background-color 0.6s var(--ease), box-shadow 0.6s var(--ease); }
+.kn .mm:has(.mm-patterns.is-on) mark { background: rgba(255, 214, 150, 0.14); box-shadow: 0 0 0 2px rgba(255, 214, 150, 0.14); }
+.mm-patterns li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); }
+.mm-name { font-weight: 600; font-size: 12.5px; }
+.mm-patterns q { color: rgba(255, 222, 170, 0.85); font-size: 12px; }
+.mm-step { margin-top: 16px; }
+.mm-reading, .mm-question { margin-top: 5px; color: var(--ink-2); }
+.mm-question { color: var(--ink); }
+
+/* Bargasht's saves, ApplyBot's sheet labels and Submit, Apsis' clock, the plugin tiles. */
+.kn .saves li, .kn .sheets .sheet-label {
+  position: fixed; left: 0; top: 0; white-space: nowrap; padding: 7px 11px; border-radius: 999px;
+  font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink);
+  background: rgba(22, 22, 24, 0.6); border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+@media (max-width: 599px) { .kn .sheets .sheet-label { font-size: 8.5px; padding: 5px 8px; letter-spacing: 0.08em; } }
+.kn .sheets .submit {
+  position: fixed; left: 0; top: 0; padding: 10px 20px; border-radius: 999px; border: 1px solid var(--line);
+  background: none; color: var(--ink-3); font: 600 14px/1 var(--sans); opacity: 0.55;
+}
+.kn .mars {
+  display: flex; gap: 10px; align-items: baseline; white-space: nowrap;
+  font: 500 12px/1 var(--mono); letter-spacing: 0.08em; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.kn .mars .mars-k { color: var(--ink-3); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+.kn .mars-drag { position: fixed; left: 0; top: 0; border-radius: 50%; touch-action: none; cursor: grab; pointer-events: none; }
+.kn .frame.is-active .mars-drag.is-on { pointer-events: auto; }
+.kn .mars-drag:active { cursor: grabbing; }
+.kn .tiles li {
+  position: fixed; left: 0; top: 0; width: 220px; height: 220px; transform-origin: 0 0;
+  display: grid; place-items: end start; padding: 20px 22px; font: 600 19px/1.1 var(--sans); letter-spacing: -0.02em; color: var(--ink);
+}
+
+/* Without WebGL there is no surface under a demo, so it brings its own glass panel. */
+.no-webgl .mm, .no-webgl .card-code, .no-webgl .tiles li {
+  background: rgba(28, 28, 30, 0.72); border: 1px solid var(--line); border-radius: 28px;
+  -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+}

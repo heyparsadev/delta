@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delta dev</title>
+<link rel="stylesheet" href="../css/fonts.css">
+<link rel="stylesheet" href="../css/tokens.css">
+<link rel="stylesheet" href="../css/base.css">
+<style>
+  body { overflow: hidden; }
+  .dev { position: fixed; right: 12px; top: 12px; z-index: 10; width: 290px; display: grid; gap: 8px;
+    padding: 14px; border-radius: 12px; background: rgba(0, 0, 0, 0.72); font: 11px/1.5 var(--mono); }
+  .dev label { display: grid; gap: 2px; }
+  .dev input[type='range'], .dev select { width: 100%; }
+  .dev .row { display: flex; gap: 8px; align-items: center; }
+</style>
+</head>
+<body>
+<div class="stage"><canvas id="terrain"></canvas><canvas id="overlay"></canvas><div class="grain"></div></div>
+<form class="dev" onsubmit="return false">
+  <label>T <output id="Tv"></output><input id="T" type="range" min="0" max="1" step="0.001" value="1"></label>
+  <label>Shot <select id="shot"></select></label>
+  <label>Visible height <output id="Hv"></output><input id="H" type="range" min="150" max="120000" step="10" value="1900"></label>
+  <label>Band <select id="band"><option value="0">Natural 4·3·2</option><option value="1">Infrared 5·4·3</option><option value="2">SWIR 7·6·4</option></select></label>
+  <label>Tilt <input id="planet" type="range" min="0" max="1.2" step="0.01" value="0"></label>
+  <label>Dim <input id="dim" type="range" min="0" max="1" step="0.01" value="0"></label>
+  <label class="row"><input id="lens" type="checkbox" checked> Lens follows the mouse</label>
+  <label class="row"><input id="play" type="checkbox"> Play T</label>
+  <p id="stats"></p>
+</form>
+<script type="module" src="dev.js"></script>
+</body>
+</html>

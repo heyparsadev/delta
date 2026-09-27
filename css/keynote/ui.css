@@ -1,0 +1,100 @@
+/* Sheets: the title card, the timeline, the tech specs and the thank-you page. Tall sheets crawl up
+   with the scroll (--crawl); the crawl follows the scroll closely, the fade does not. */
+.kn .sheet {
+  position: absolute; left: calc(var(--gutter) + var(--safe-l)); right: calc(var(--gutter) + var(--safe-r));
+  top: calc(var(--bar-h) + var(--safe-t) + 9vh);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity var(--slide-out) var(--ease), transform var(--slide-out) var(--ease);
+}
+.kn .sheet.is-on { opacity: 1; transform: translateY(var(--crawl, 0px)); transition: opacity var(--slide-in) var(--ease), transform 0.12s linear; }
+
+.title-card { text-align: center; }
+.kn .title-card { top: 50%; transform: translateY(calc(-62% + 20px)); }
+.kn .title-card.is-on { transform: translateY(-62%); }
+.title-card h1 { font: 650 clamp(52px, 9vw, 150px)/0.95 var(--sans); letter-spacing: var(--track-name); }
+.title-card .lede { font: 500 var(--fs-tag)/1.35 var(--sans); margin-top: 0.9em; }
+.title-card .sub { font: 450 var(--fs-tag)/1.35 var(--sans); color: var(--ink-2); margin-top: 0.25em; }
+.title-card .start { margin-top: 2.4em; display: flex; gap: 16px; align-items: center; justify-content: center; font: 500 15px/1 var(--sans); color: var(--ink-3); }
+.watch {
+  display: inline-flex; align-items: center; gap: 10px; padding: 13px 24px 13px 20px;
+  border: 0; border-radius: 999px; background: var(--ink); color: var(--bg); font: 600 16px/1 var(--sans); cursor: pointer;
+}
+.watch svg { width: 11px; height: 13px; fill: currentColor; }
+.watch[hidden], .watch[hidden] + .or { display: none; }
+
+/* Chapter bar. Plan 2 adds Play/Pause and the phone chapter list. */
+.chapters {
+  position: fixed; left: 0; right: 0; top: 0; z-index: var(--z-bar);
+  height: calc(var(--bar-h) + var(--safe-t));
+  padding: var(--safe-t) calc(var(--gutter) + var(--safe-r)) 0 calc(var(--gutter) + var(--safe-l));
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
+}
+.ch-list { display: flex; gap: clamp(14px, 2.2vw, 34px); font: 500 12.5px/1 var(--sans); letter-spacing: 0.01em; color: var(--ink-3); }
+.ch-list a { text-decoration: none; transition: color 0.25s var(--ease); }
+.ch-list a:hover, .ch-list a[aria-current="true"] { color: var(--ink); }
+.ch-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgba(255, 255, 255, 0.08); }
+.ch-progress span { display: block; height: 100%; transform-origin: 0 50%; transform: scaleX(var(--progress, 0)); background: rgba(245, 245, 247, 0.55); }
+/* Play/Pause at the right of the bar; on phones the bar shows the current chapter, and a tap on it opens
+   the list as a panel under the bar. */
+.ch-play, .ch-current {
+  border: 0; background: none; cursor: pointer; color: var(--ink-2); font: 500 12.5px/1 var(--sans); letter-spacing: 0.01em;
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; margin: 0 -10px; border-radius: 999px;
+  transition: color 0.25s var(--ease), background-color 0.25s var(--ease);
+}
+.ch-play:hover, .ch-current:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
+.ch-play { position: absolute; right: calc(var(--gutter) + var(--safe-r)); top: calc(var(--safe-t) + (var(--bar-h) - 29px) / 2); }
+.ch-play svg { width: 9px; height: 11px; fill: currentColor; }
+.ch-play .i-pause, .ch-play.is-playing .i-play { display: none; }
+.ch-play.is-playing .i-pause { display: block; }
+.ch-current { display: none; }
+@media (max-width: 899px) {
+  .kn .chapters { justify-content: flex-start; }
+  .kn .ch-current { display: inline-flex; color: var(--ink); }
+  .kn .ch-current::after { content: ''; width: 6px; height: 6px; margin-left: 2px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: translateY(-2px) rotate(45deg); opacity: 0.7; }
+  .kn .ch-list { display: none; }
+  .kn .chapters.is-open .ch-list {
+    display: flex; flex-direction: column; gap: 0; position: absolute; left: calc(var(--gutter) + var(--safe-l) - 14px); top: calc(var(--bar-h) + var(--safe-t) - 4px);
+    min-width: 13em; padding: 8px; border-radius: 16px; background: rgba(28, 28, 30, 0.9); border: 1px solid var(--line);
+    -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); font-size: 15px;
+  }
+  .kn .chapters.is-open .ch-list a { display: block; padding: 11px 12px; border-radius: 10px; }
+  .kn .chapters.is-open .ch-list a:hover { background: rgba(255, 255, 255, 0.06); }
+}
+:root:not(.kn) .ch-play, :root:not(.kn) .ch-current { display: none; }
+
+/* While the film plays, the captions step aside; they come back on pause. */
+.kn .caption { transition: opacity 0.4s var(--ease); }
+.watching .caption { opacity: 0; }
+:root:not(.kn) .chapters { position: static; height: auto; padding: 22px var(--gutter); background: none; }
+:root:not(.kn) .ch-list { flex-wrap: wrap; justify-content: center; }
+:root:not(.kn) .ch-progress { display: none; }
+
+.timeline-line { font: 600 var(--fs-long)/1.3 var(--sans); letter-spacing: -0.03em; text-align: center; text-wrap: balance; }
+.timeline-line a { text-decoration: none; white-space: nowrap; }
+.timeline-line b { color: var(--ink-3); font-weight: 600; margin-right: 0.18em; }
+.timeline-line .form { width: 0.8em; height: 0.8em; margin-right: 0.28em; vertical-align: -0.06em; fill: none; stroke: currentColor; stroke-width: 1.6; }
+
+.kn .specs { left: 50%; right: auto; width: min(60em, calc(100vw - 2 * var(--gutter))); transform: translate(-50%, 20px); }
+.kn .specs.is-on { transform: translate(-50%, var(--crawl, 0px)); }
+.specs .heading { font: 600 var(--fs-heading)/1.05 var(--sans); letter-spacing: -0.03em; margin: 0.3em 0 0.9em; }
+.spec div { display: grid; grid-template-columns: minmax(5.5em, 1fr) 4fr; gap: 1.4em; padding: 1.05em 0; border-top: 1px solid var(--line); }
+.spec dt { font-weight: 600; }
+.spec dd { color: var(--ink-2); }
+@media (max-width: 599px) { .spec div { grid-template-columns: 1fr; gap: 0.3em; } }
+
+.thanks { text-align: center; }
+.kn .thanks { top: 50%; transform: translateY(calc(-50% + 20px)); }
+.kn .thanks.is-on { transform: translateY(-50%); }
+.thanks-title { font: 650 var(--fs-name)/0.95 var(--sans); letter-spacing: var(--track-name); }
+.links-line { margin-top: 1.3em; display: flex; flex-direction: column; align-items: center; gap: 0.45em; font: 500 var(--fs-tag)/1.3 var(--sans); }
+.links-line a { text-decoration: none; }
+.links-line a:hover { text-decoration: underline; }
+.links-line .sep { display: none; }
+.thanks .end { margin-top: 2.2em; font: 500 15px/1 var(--sans); color: var(--ink-2); }
+.thanks .fine { margin-top: 1em; font: 500 var(--fs-mono)/1.4 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+
+.debug {
+  position: fixed; left: 10px; bottom: 10px; z-index: 50; margin: 0; padding: 8px 10px; border-radius: 8px;
+  background: rgba(0, 0, 0, 0.72); color: #9ff0d8; font: 11px/1.45 var(--mono); pointer-events: none; white-space: pre;
+}

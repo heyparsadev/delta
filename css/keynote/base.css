@@ -1,0 +1,70 @@
+/* Keynote base: reset, type, the stage, and the transcript layout used whenever the keynote
+   script is not running. */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: var(--bg); }
+body {
+  margin: 0; min-height: 100vh; background: var(--bg); color: var(--ink);
+  font: 400 var(--fs-body)/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+h1, h2, h3, p, ol, ul, dl, dd { margin: 0; }
+h1, h2, h3 { font-weight: 600; }
+ol, ul { padding: 0; list-style: none; }
+a {
+  color: inherit; text-decoration-line: underline; text-decoration-color: var(--line);
+  text-decoration-thickness: 1px; text-underline-offset: 0.22em;
+  transition: color 0.2s var(--ease), text-decoration-color 0.2s var(--ease);
+}
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: 6px; }
+::selection { background: rgba(159, 201, 255, 0.3); color: #fff; }
+strong, b { font-weight: 600; }
+button { font: inherit; color: inherit; }
+q { quotes: '“' '”' '‘' '’'; }
+
+.skip {
+  position: fixed; left: 12px; top: 12px; z-index: var(--z-skip);
+  padding: 10px 14px; border-radius: 10px; background: var(--ink); color: var(--bg);
+  font: 500 14px/1 var(--sans); text-decoration: none;
+  transform: translateY(-180%); transition: transform 0.2s var(--ease);
+}
+.skip:focus { transform: none; }
+
+.kicker { font: 500 var(--fs-mono)/1.5 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+
+/* The stage: one canvas behind everything. Without WebGL a soft light stands in for it. */
+.stage { position: fixed; inset: 0; z-index: var(--z-stage); pointer-events: none; }
+.stage canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100vh; height: 100lvh; display: block; }
+.stage .glow {
+  position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s var(--ease);
+  background: radial-gradient(circle at 50% 64%, rgba(255, 236, 214, 0.55) 0, rgba(255, 214, 178, 0.12) 6vmin, rgba(0, 0, 0, 0) 30vmin);
+}
+.no-webgl .stage canvas { display: none; }
+.no-webgl .stage .glow { opacity: 1; }
+
+/* Transcript: no JavaScript, or the keynote script failed. With JavaScript on, the page waits a
+   moment for the keynote, then shows the transcript if the keynote never starts. */
+:root:not(.kn) .stage { display: none; }
+.js:not(.kn) main, .js:not(.kn) footer, .js:not(.kn) .chapters { opacity: 0; animation: kn-fallback 0.5s 1.8s forwards; }
+@keyframes kn-fallback { to { opacity: 1; } }
+:root:not(.kn) main, :root:not(.kn) footer { max-width: 44em; margin: 0 auto; padding: 0 var(--gutter); }
+:root:not(.kn) .chapter { padding: 10vh 0 4vh; }
+:root:not(.kn) .beat { margin: 0 0 2em; }
+:root:not(.kn) .slide[aria-hidden="true"], :root:not(.kn) .big[aria-hidden="true"],
+:root:not(.kn) .kicker[aria-hidden="true"], :root:not(.kn) .demo,
+:root:not(.kn) [data-watch], :root:not(.kn) .or { display: none; }
+:root:not(.kn) .slides { margin-bottom: 1em; }
+:root:not(.kn) .name { font: 650 clamp(40px, 7vw, 84px)/1 var(--sans); letter-spacing: var(--track-name); margin: 0.1em 0 0.2em; }
+:root:not(.kn) .tagline, :root:not(.kn) .heading, :root:not(.kn) .slide.heading { font-size: var(--fs-tag); }
+:root:not(.kn) .meta { margin-left: 0.5em; font: 500 var(--fs-mono)/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+:root:not(.kn) .caption { font-size: var(--fs-caption); line-height: 1.62; }
+:root:not(.kn) .slide.omt { font: italic 400 clamp(44px, 8vw, 96px)/1 var(--serif); }
+
+/* Reduced motion: nothing moves on its own; things only fade. Only opacity may transition: a duration
+   on every element with the default property (all) would make heights and paddings transition too, and
+   the keynote measures its layout the moment it starts. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-property: opacity !important; transition-duration: 0.2s !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+}
+.reduced *, .reduced *::before, .reduced *::after { transition-property: opacity !important; transition-duration: 0.2s !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }

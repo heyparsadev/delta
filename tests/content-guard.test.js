@@ -18,8 +18,8 @@ const ALLOW = new Set([
   'https://github.com/heyparsadev/persian-llm-eval', 'https://github.com/heyparsadev',
   'https://x.com/parsakzn', 'https://t.me/parsa_notes',
   'https://www.linkedin.com/in/parsa-kharazmian-2507a4223/', 'mailto:me@heyparsa.com',
-  'https://heyparsa.com/', 'https://heyparsa.com/keynote', 'https://heyparsa.com/assets/og.jpg',
-  'https://heyparsa.com/assets/og-keynote.jpg',
+  'https://delta-bay-sigma.vercel.app/', 'https://delta-bay-sigma.vercel.app/keynote', 'https://delta-bay-sigma.vercel.app/assets/og.jpg',
+  'https://delta-bay-sigma.vercel.app/assets/og-keynote.jpg',
 ]);
 
 for (const page of PAGES) {

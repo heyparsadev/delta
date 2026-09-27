@@ -2,7 +2,7 @@
   "name": "heyparsa-delta",
   "private": true,
   "version": "1.0.0",
-  "description": "heyparsa.com: a satellite pass over one river, grown from Parsa's timeline",
+  "description": "Delta: a satellite pass over one river, grown from Parsa's timeline",
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.js",

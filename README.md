@@ -8,6 +8,9 @@ The personal site of Parsa Kharazmian, in two versions that share the same words
 - **The Keynote** (`keynote.html`): the portfolio as an Apple keynote. One glass object on a black stage
   changes form with each chapter, and the copy plays as captions under the slides.
 
+Live at **https://delta-bay-sigma.vercel.app**, with the Keynote at
+[`/keynote`](https://delta-bay-sigma.vercel.app/keynote).
+
 <p>
   <img src="assets/og.jpg" width="49%" alt="Delta: the grown river delta from above, with Parsa's name and the time scrubber">
   <img src="assets/og-keynote.jpg" width="49%" alt="The Keynote: Parsa's name on a black stage above one small light">
@@ -75,6 +78,9 @@ This copies only the site (`index.html`, `keynote.html`, `css/`, `js/`, `fonts/`
 `dist/`. Upload the contents of `dist/` to any static host, and nothing else: the tests, the dev tools
 and, in the private working copy, the source notes are not part of the site.
 
+On Vercel, `vercel.json` does this by itself: every push to `main` runs `npm run dist`, serves `dist/`
+and turns on clean URLs, so the Keynote is at `/keynote`.
+
 ## The Keynote
 
 `keynote.html` is the portfolio as an Apple keynote. One glass object on a black stage changes form
@@ -103,9 +109,8 @@ URLs and `/keynote.html` elsewhere. Delta and the Keynote do not link to each ot
 ### Making the Keynote the main site
 
 `npm run dist` ships both pages. To swap them, rename `index.html` to `delta.html` and `keynote.html` to
-`index.html`, then change the Keynote's canonical and `og:url` to `https://heyparsa.com/` (and Delta's to
-`https://heyparsa.com/delta` if it stays online), and update the URL list in
-`tests/content-guard.test.js`. Every path is relative and both pages sit at the root, so nothing else
+`index.html`, then change the Keynote's canonical and `og:url` to the site's root (and Delta's to
+`/delta` if it stays online), and update the URL list in `tests/content-guard.test.js`. Every path is relative and both pages sit at the root, so nothing else
 changes.
 
 ## Keyboard
